@@ -1,4 +1,4 @@
-# dotfiles
+# emacs dotfiles
 Just config files for Emacs that I actively use.
 
 ## Requirements
