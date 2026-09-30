@@ -17,6 +17,7 @@ projects
 projectile-bookmarks.eld
 tramp
 history
+smex-items
 .mc-lists.el
 
 *.elc

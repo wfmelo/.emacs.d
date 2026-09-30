@@ -29,9 +29,17 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
-;; disable package.el at an early stage (use-package will load the necessary one on its own).
-(setq package-enable-at-startup nil)
+(setq package-enable-at-startup t)
 
 (setq package-quickstart t)
 
 (setq native-comp-deferred-compilation t)
+
+;; Package repositories
+(setq package-archives
+      '(("gnu"    . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+        ("melpa"  . "https://melpa.org/packages/")))
+
+;;; Font
+(set-face-attribute 'default nil :height 140)

@@ -9,12 +9,12 @@
 (my-startup-mark "BEGIN")
 
 ;;; initialize package.el
-(package-initialize)
+;;(package-initialize)
 
 (my-startup-mark "my-workflows")
 (require 'my-workflows)
 
-(setq package-check-signature nil)
+;;(setq package-check-signature nil)
 
 (setq whitespace-line-column 500)
 
@@ -29,13 +29,13 @@
       '(("\\.exe\\'" "start")))
 
 ;;; Font
-(my-startup-mark "get-default-font")
-(defun get-default-font ()
-  (cond
-   ((eq system-type 'windows-nt) "Consolas-14")
-   ((eq system-type 'gnu/linux) "Ubuntu Mono-14")))
+;; (my-startup-mark "get-default-font")
+;; (defun get-default-font ()
+;;   (cond
+;;    ((eq system-type 'windows-nt) "Consolas-14")
+;;    ((eq system-type 'gnu/linux) "Ubuntu Mono-14")))
 
-(add-to-list 'default-frame-alist `(font . ,(get-default-font)))
+;;(add-to-list 'default-frame-alist `(font . ,(get-default-font)))
 
 ;;; theme init
 (my-startup-mark "load-theme")
@@ -53,13 +53,15 @@
   (ido-everywhere 1))
   
 ;;; smex
-  (use-package smex
-    :bind (("M-x" . smex)
-           ("C-c C-c M-x" . execute-extended-command)))
+(use-package smex
+  :ensure t
+  :bind (("M-x" . smex)
+         ("C-c C-c M-x" . execute-extended-command)))
 
 ;;; paredit
 (my-startup-mark "paredit")
 (use-package paredit
+  :ensure t
   :hook ((emacs-lisp-mode
           clojure-mode
           lisp-mode
@@ -72,18 +74,19 @@
 (setq-default tab-width 4)
 
 ;;; coding system
+(set-language-environment "UTF-8")
+
+(prefer-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
+(set-terminal-coding-system 'utf-8-unix)
+(set-keyboard-coding-system 'utf-8-unix)
+(set-selection-coding-system 'utf-8-unix)
+
 (setq-default buffer-file-coding-system 'utf-8-unix)
-(setq utf-translate-cjk-mode nil) ; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
-  (set-language-environment 'utf-8)
-  (set-keyboard-coding-system 'utf-8-mac) ; For old Carbon emacs on OS X only
-  (setq locale-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-selection-coding-system
-    (if (eq system-type 'windows-nt)
-        'utf-16-le  ;; https://rufflewind.com/2014-07-20/pasting-unicode-in-emacs-on-windows
-      'utf-8))
-  (prefer-coding-system 'utf-8)
+
+(add-hook 'before-save-hook
+          (lambda ()
+            (set-buffer-file-coding-system 'utf-8-unix)))
 
 ;;; backup saves
 (setq backup-directory-alist
@@ -163,6 +166,7 @@
 ;;; magit
 (my-startup-mark "magit")
 (use-package magit
+  :ensure t
   :defer t
   :bind (("C-c m s" . magit-status)
          ("C-c m l" . magit-log))
@@ -185,6 +189,7 @@
 ;;; multiple cursors
 (my-startup-mark "multiple cursors")
 (use-package multiple-cursors
+  :ensure t
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->"         . mc/mark-next-like-this)
          ("C-<"         . mc/mark-previous-like-this)
@@ -215,6 +220,7 @@
 ;; (yas-global-mode 1)
 
 (use-package yasnippet
+  :ensure t
   :defer t
   :hook ((prog-mode . yas-minor-mode)
          (org-mode . yas-minor-mode))
@@ -228,6 +234,7 @@
 
 (use-package company
   ;; We turn it on automatically only in programming modes
+  :ensure t
   :hook (prog-mode . company-mode)
   :custom
   (company-idle-delay nil)
@@ -239,6 +246,7 @@
 
 ;; helm
 (use-package helm
+  :ensure t
   :bind (("C-c h t"   . helm-cmd-t)
          ("C-c g s"   . helm-imenu)
          ("C-c h f"   . helm-find)
@@ -262,6 +270,7 @@
 
 (my-startup-mark "dead-grip")
 (use-package deadgrep
+  :ensure t
   :bind (("C-c g d" . deadgrep)))
 
 (setq my-rg-args
