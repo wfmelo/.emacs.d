@@ -10,8 +10,9 @@
 (my-startup-mark "BEGIN")
 
 ;;; initialize package.el
-(my-startup-mark "package-initialize")
-(package-initialize)
+(unless (eq system-type 'gnu/linux)
+  (my-startup-mark "package-initialize")
+  (package-initialize))
 
 (my-startup-mark "my-workflows")
 (require 'my-workflows)

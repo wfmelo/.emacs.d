@@ -39,7 +39,8 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
-(setq package-enable-at-startup nil)
+(setq package-enable-at-startup
+      (eq system-type 'gnu/linux))
 
 (setq package-quickstart t)
 
