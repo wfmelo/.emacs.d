@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t; -*-
+
 (defvar my-start-time (current-time))
 
 (defun my-startup-mark (name)
@@ -9,7 +10,8 @@
 (my-startup-mark "BEGIN")
 
 ;;; initialize package.el
-;;(package-initialize)
+(my-startup-mark "package-initialize")
+(package-initialize)
 
 (my-startup-mark "my-workflows")
 (require 'my-workflows)

@@ -1,5 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 
+(defvar my-early-start-time (current-time))
+
+(defun my-early-startup-mark (name)
+  (message "[EARLY %.3fs] %s"
+           (float-time
+            (time-subtract (current-time) my-early-start-time))
+           name))
+
+(my-early-startup-mark "BEGIN")
+
 ;; increasing the limit for launch time (~50 MB).
 (setq gc-cons-threshold (* 50 1000 1000))
 
@@ -29,7 +39,7 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
-(setq package-enable-at-startup t)
+(setq package-enable-at-startup nil)
 
 (setq package-quickstart t)
 
@@ -41,5 +51,10 @@
         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
         ("melpa"  . "https://melpa.org/packages/")))
 
+
 ;;; Font
 (set-face-attribute 'default nil :height 140)
+(when (eq system-type 'windows-nt)
+  (add-to-list 'default-frame-alist '(font . "Consolas")))
+
+(my-early-startup-mark "END")
