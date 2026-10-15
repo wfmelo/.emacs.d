@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (require 'subr-x)
 
 (defvar simpc-mode-syntax-table
@@ -18,6 +19,18 @@
     (modify-syntax-entry ?& "." table)
     (modify-syntax-entry ?% "." table)
     table))
+
+(defcustom simpc-indent-level 4
+  "The number of spaces for indentation in simpc-mode"
+  :type 'integer
+  :group 'simpc)
+
+(defvar simpc-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "RET") 'simpc-smart-enter)
+    (define-key map (kbd "TAB") 'simpc-smart-tab)
+    map)
+  "Keymap for `simpc-mode'.")
 
 (defun simpc-types ()
   '("char" "int" "long" "short" "void" "bool" "float" "double" "signed" "unsigned"
@@ -116,6 +129,35 @@
            (n (max (- (current-column) (current-indentation)) 0)))
       (indent-line-to desired-indentation)
       (forward-char n))))
+
+(defun simpc-smart-enter ()
+  (interactive)
+  (let* ((prev-indent (current-indentation))
+         (line-text (buffer-substring-no-properties (line-beginning-position) (point))))
+    
+    (insert "\n")
+    
+    (if (or (string-match-p "{\\s-*$" line-text)
+            (and (string-match-p "\\b\\(if\\|while\\|for\\|else\\)\\b" line-text)
+                 (not (string-match-p "[;:]\\s-*$" line-text))))
+        (indent-line-to (+ prev-indent simpc-indent-level))
+      (indent-line-to prev-indent))))
+
+(defun simpc-smart-tab ()
+  (interactive)
+  (let ((line-text (thing-at-point 'line t))
+        (old-indent (current-indentation))
+        (old-col (current-column)))
+    
+    (if (string-match-p "^\\s-*\\(public\\|private\\|protected\\):" line-text)
+        (let ((new-indent (max 0 (- old-indent simpc-indent-level))))
+          
+          (indent-line-to new-indent)
+          (if (<= old-col old-indent)
+              (back-to-indentation)
+            (move-to-column (+ new-indent (- old-col old-indent)))))
+      
+      (indent-for-tab-command))))
 
 (define-derived-mode simpc-mode prog-mode "Simple C"
   "Simple major mode for editing C files."

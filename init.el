@@ -80,15 +80,15 @@
 
 (prefer-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
-(set-terminal-coding-system 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8-unix)
-(set-selection-coding-system 'utf-8-unix)
+;; (set-terminal-coding-system 'utf-8-unix)
+;; (set-keyboard-coding-system 'utf-8-unix)
+;; (set-selection-coding-system 'utf-8-unix)
 
 (setq-default buffer-file-coding-system 'utf-8-unix)
 
-(add-hook 'before-save-hook
-          (lambda ()
-            (set-buffer-file-coding-system 'utf-8-unix)))
+;; (add-hook 'before-save-hook
+;;           (lambda ()
+;;             (set-buffer-file-coding-system 'utf-8-unix)))
 
 ;;; backup saves
 (setq backup-directory-alist
@@ -129,8 +129,25 @@
 ;;; simpc
 (use-package simpc-mode
   :mode "\\.[hc]\\(pp\\)?\\'"
-  :custom
-  (simpc-indent-level 4))
+  :config
+  (add-hook 'simpc-mode-hook
+            (lambda ()
+              (add-to-list (make-local-variable 'electric-indent-chars) ?}))))
+
+(defun toggle-simpc-mode ()
+  (interactive)
+  (if (eq major-mode 'simpc-mode)
+      (progn
+        (let ((ext (file-name-extension (or buffer-file-name ""))))
+          (if (string= ext "c")
+              (c-mode)
+            (c++-mode)))
+        (message "c-mode on"))
+    (progn
+      (simpc-mode)
+      (message "simpc-mode on"))))
+
+(global-set-key (kbd "C-c t c") 'toggle-simpc-mode)
 
 ;;; markdown
 (use-package markdown-mode

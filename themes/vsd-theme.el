@@ -18,8 +18,8 @@
 
 (custom-theme-set-faces
  'vsd
- `(default                      ((t (:background "#1E1E1E" :foreground "#ffffff"
-                                                 ))))
+ `(default                      ((t (:background "black"
+                                                 :foreground "#ffffff"))))
  `(font-lock-builtin-face       ((t (:foreground "light steel blue"))))
  `(font-lock-comment-face       ((t (:foreground "olive drab"))))
  `(font-lock-negation-char-face ((t (:foreground "#38EFCA"))))
@@ -44,17 +44,22 @@
  `(cursor  ((t :background "#ffffff")))
  `(hl-line ((t :background ,(if (display-graphic-p) "#2E2E2E" "#363636"))))
  `(region  ((t :background "#264F78")))
- `(fringe  ((t :background "#333333")))
+ `(fringe  ((t :inherit default)))
 
  `(completions-annotations ((t :inherit (shadow))))
  `(completions-common-part ((t :foreground "#72A4FF" :weight bold)))
 
  `(highlight ((t :background ,(if (display-graphic-p) "#264F78" "#363636"))))
 
- `(line-number              ((t (:foreground "#52494e"))))
- `(line-number-current-line ((t (:background "#1E1E1E" :foreground "#FFFFFF"))))
+ ;; line numbers
+ `(line-number              ((t (:inherit default :foreground "#52494e"))))
+ `(line-number-current-line ((t (:inherit line-number :foreground "#FFFFFF"))))
+ ;; Linum
+ `(linum ((t `(list :foreground "#52494e"
+                    :background "black"))))
+ 
  '(helm-source-header ((t (:foreground "#ffdd33"
-                                  :box (:line-width -1 :style released-button)))))
+                                       :box (:line-width -1 :style released-button)))))
  `(dired-directory ((t (:foreground "LightSkyBlue"))))
  '(dired-ignored ((t (:foreground "LightSteelBlue"))))
 
